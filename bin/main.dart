@@ -17,5 +17,28 @@
 // Input: candies = 7, num_people = 4
 //  Output: [1,2,3,1]
 
+List<int> candy_distributor (int candies, int num_people){
+  List candies_given_away = List<int>.generate(num_people, (i) => i = 0);
+  int offset = 0;
+//  while (candies > 0) {
+//    offset = offset + 1;
+//    for (int j = 0; j < candies_given_away.length; j++){
+//    //    int people = candies_given_away[j];
+//      if (candies>0){
+//          candies_given_away[j] = candies_given_away[j] + offset;
+//          candies = candies - offset;
+//      }
+//      else{
+//        return candies_given_away;
+//      }
+//    }
+//  }
+  while(candies < 0){
+
+  }
+  return candies_given_away;
+}
+
 main() {
+  print(candy_distributor(7, 4));
 }
