@@ -17,28 +17,90 @@
 // Input: candies = 7, num_people = 4
 //  Output: [1,2,3,1]
 
-List<int> candy_distributor (int candies, int num_people){
+import 'dart:math';
+
+import 'package:test/test.dart';
+
+List<int> candy_distributor(int candies, int num_people) {
   List candies_given_away = List<int>.generate(num_people, (i) => i = 0);
   int offset = 0;
-//  while (candies > 0) {
-//    offset = offset + 1;
-//    for (int j = 0; j < candies_given_away.length; j++){
-//    //    int people = candies_given_away[j];
-//      if (candies>0){
-//          candies_given_away[j] = candies_given_away[j] + offset;
-//          candies = candies - offset;
-//      }
-//      else{
-//        return candies_given_away;
-//      }
-//    }
-//  }
-  while(candies < 0){
-
+  while (candies > 0) {
+    offset++;
+    for (int j = 0; j < candies_given_away.length; j++) {
+      if (candies > (j + offset)) {
+        candies_given_away[j] = candies_given_away[j] + j + offset;
+        candies = candies - (j + offset);
+      } else {
+        candies_given_away[j] = candies_given_away[j] + candies;
+        candies = 0;
+        return candies_given_away;
+      }
+    }
   }
-  return candies_given_away;
+//  return candies_given_away;
+}
+
+// Challenge 2
+// Burst Balloons
+// Given n balloons, indexed from 0 to n-1. Each balloon is painted with a number
+// on it represented by array nums. You are asked to burst all the balloons.
+// If the you burst balloon i you will get nums[left] * nums[i] * nums[right] coins.
+// Here left and right are adjacent indices of i. After the burst, the left and
+// right then becomes adjacent.
+//
+//  Find the maximum coins you can collect by bursting the balloons wisely.
+
+// Stage 1
+// Write a function which calculates total coins earned by bursting a balloon at index 'i'
+
+// Stage 2
+// Implement the algorithm to calculate the maximum coins that can be earned.
+
+Map<List<int>, int> balloon_pop(List<int> ballons_list, int position) {
+  position = position - 1;
+  int adjacent_right = 0;
+  int adjacent_left = 0;
+  int result;
+
+  position - 1 == -1
+      ? adjacent_left = 1
+      : adjacent_left = ballons_list[position - 1];
+
+  position + 1 == ballons_list.length
+      ? adjacent_right = 1
+      : adjacent_right = ballons_list[position + 1];
+
+  result = adjacent_left * adjacent_right * ballons_list[position];
+  ballons_list.removeAt(position);
+
+  return {ballons_list : result};
+}
+
+List balloon_max_value(List <int> input_List){
+  List<int> copy = List.from(input_List);
+  print( 'beginning = ${input_List}');
+  List<Map<List<int>, int>> result = [];
+  for(int i = 0; i < copy.length; i++){
+    List<int> copy = List.from(input_List);
+//    print('index = $i List = ${copy}');
+    result.add(balloon_pop(copy, i + 1));
+//    print (result);
+  }
+  List<int> a = [];
+
+  for(Map x in result){
+    a.add(int.parse(x.values.first.toString()));
+  }
+  print (a.reduce(max));
+//  print(result);
+  int position = result.indexWhere((Map answer) => answer.containsValue(a.reduce(max))) + 1;
+  return balloon_max_value(result[position].keys.last);
 }
 
 main() {
-  print(candy_distributor(7, 4));
+//  print(candy_distributor(7, 4));
+//  print(candy_distributor(10, 4));
+//  print(balloon_pop([3, 5, 7], 1));
+print(balloon_max_value([3,5,7,1,9]));
+
 }
