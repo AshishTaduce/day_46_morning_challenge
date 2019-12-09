@@ -56,65 +56,35 @@ List<int> candy_distributor(int candies, int num_people) {
 // Stage 2
 // Implement the algorithm to calculate the maximum coins that can be earned.
 
-List <int> result2 = [];
+int balloon_pop(List<int> balloons_list, int position) {
+//  position = position - 1;
+  int adjacent_right = 0;
+  int adjacent_left = 0;
+  int result;
+//print(position);
+  position - 1 == -1
+      ? adjacent_left = 1
+      : adjacent_left = balloons_list[position - 1];
 
-class resultAccumulator{
-
-  Map<List<int>, int> balloon_pop(List<int> balloons_list, int position) {
-    position = position - 1;
-    int adjacent_right = 0;
-    int adjacent_left = 0;
-    int result;
-
-    position - 1 == -1
-        ? adjacent_left = 1
-        : adjacent_left = balloons_list[position - 1];
-
-    position + 1 == balloons_list.length
-        ? adjacent_right = 1
-        : adjacent_right = balloons_list[position + 1];
+  position + 1 == balloons_list.length
+      ? adjacent_right = 1
+      : adjacent_right = balloons_list[position + 1];
 
 //  print('$adjacent_left + $adjacent_right + ${balloons_list[position]}');
-    result = adjacent_left * adjacent_right * balloons_list[position];
-    balloons_list.removeAt(position);
-    return {balloons_list : result};
-  }
-
-  List balloon_max_value(List <int> input_List){
-    if(input_List.length == 2){
-//    return resultAccumulator().calculateSum();
-    result2.add(((input_List.first * input_List.last) * max(input_List.first, input_List.last)));
-      return [{input_List : ((input_List.first * input_List.last) * max(input_List.first, input_List.last))}];
-    }
-    List<int> a = [];
-    List<int> copy = List.from(input_List);
-    print( 'beginning = ${input_List}');
-    List<Map<List<int>, int>> result = [];
-    for(int i = 0; i < copy.length; i++){
-      List<int> copy = List.from(input_List);
-//    print('index = $i List = ${copy}');
-      result.add( resultAccumulator().balloon_pop(copy, i + 1));
-//    print (result);
-    }
-
-    for(Map x in result){
-      a.add(int.parse(x.values.first.toString()));
-    }
-    print (a.reduce(max));
-    result2.add(a.reduce(max));
-
-  print(result);
-    int position = result.indexWhere((Map answer) => answer.containsValue(a.reduce(max))) + 1;
-    return balloon_max_value(result[position - 1].keys.last);
-  }
+  result = adjacent_left * adjacent_right * balloons_list[position];
+  return result;
 }
 
-int maximumAmountOfCoinsCollectable(List<int>a) {
-  List x = [];
-  resultAccumulator().balloon_max_value(a);
-  print(result2);
-  return(result2.reduce((a,b) => a + b));
-}
+int maximumAmountOfCoinsCollectable (List <int> balloons){
+  if( balloons.length == 1)return balloons.first;
+  int maxCoins = 0;
+  for(int i =0; i < balloons.length; i++){
+    var copy = List.from(balloons);
+    var coinsFromI = balloon_pop(copy, i);
+    copy.removeAt(i);
+    coinsFromI = coinsFromI + maximumAmountOfCoinsCollectable(copy);
+    if(maxCoins < coinsFromI) maxCoins = coinsFromI;
+  }return maxCoins;}
 
 void main() {
 //  print(candy_distributor(7, 4));
@@ -123,5 +93,4 @@ void main() {
 //print(balloon_max_value([3,5,7,1,9]));
 //print(maximumAmountOfCoinsCollectable([3,5,7,1,9]));
 print(maximumAmountOfCoinsCollectable([3,1,5,8]));
-
 }
